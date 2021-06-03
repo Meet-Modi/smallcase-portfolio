@@ -1,10 +1,6 @@
 const mongoose = require('mongoose');
 
 const securitySchema = new mongoose.Schema({
-    securityId: {
-        type: String,
-        unique: true
-    },
     tickerSymbol: {
         type: String,
         unique: true

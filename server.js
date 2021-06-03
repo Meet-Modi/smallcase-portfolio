@@ -35,13 +35,17 @@ mongoose
 
 const app = express();
 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+
 app.get('/', (req, res) => {
 	res.send(`Hello World! request recieved on http://localhost:${port}`);
 });
 
 app.use('/api', router);
 app.use('/api/trades', tradeRouter);
-app.use('/api/security', securityRouter);
+app.use('/api/securities', securityRouter);
 
 const port = process.env.PORT || 3000;
 app.listen(port, function () {

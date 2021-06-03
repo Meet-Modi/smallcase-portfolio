@@ -5,8 +5,7 @@ const securitymodel = require('../models/security')
 
 const router = express.Router();
 
-router.get('/fetch',securityController.check_if_security_exists);
-
-router.post('/addSecurity',securityController.add_security);
+router.get('/fetch',securityController.fetchAllExistingSecurities);
+router.post('/add',securityController.add_security);
 
 module.exports = router;

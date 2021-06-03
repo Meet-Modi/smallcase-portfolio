@@ -1,20 +1,12 @@
 const mongoose = require('mongoose');
 
 const portfolioSchema = new mongoose.Schema({
-    portfolioId : {
+    tickerSymbol:{
         type: String,
-        unique : true
+        ref: 'security'
     },
-    portfolio:[
-        {
-            securityId:{
-                type: String,
-                ref: 'SecurityModel'
-            },
-            averageCost: Number,
-            Quantity : Number
-        }
-    ]
+    averageCost: Number,
+    Quantity : Number
 });
 
 var PortfolioModel = mongoose.model('Portfolio', portfolioSchema);

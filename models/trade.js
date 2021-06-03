@@ -1,19 +1,18 @@
 const mongoose = require('mongoose');
 
 const tradeSchema = new mongoose.Schema({
-    txnId: {
-        type: String,
+    tradeId: {
+        type: Number,
         unique: true
     },
     timestamp: {
         type: Date,
         default: Date.now()
     },
-    securityId: {
-        type: String,
-        ref: 'Securities'
+    tickerSymbol: {
+        type: String
     },
-    txnType: {
+    tradeType: {
         type: String,
         enum: ['Buy','Sell']
     },

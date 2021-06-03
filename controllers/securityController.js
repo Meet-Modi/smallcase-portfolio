@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 const SecurityModel = require('../models/security')
-
+const crypto = require('crypto')
 
 const fetchAllExistingSecurities = async function(req,res){
     console.log("in sec. controller");
@@ -11,32 +11,34 @@ const fetchAllExistingSecurities = async function(req,res){
         res.send(data);
     }
     catch(err){
-        throw { message: `fetching of securities failed.` }
+        throw { message: `fetching of securities failed.`}
     }
 }
 
-const check_if_security_exists = async function(tickerSymbol){
+const check_if_security_exists = async function(tickersymbol){
     try{
-        var data = await SecurityModel.findOne({tickerSymbol : 'TCS'});
-        console.log(data);
+        var data = await SecurityModel.findOne({tickerSymbol : tickersymbol});
         if(data)
-            return data;
+            return true;
         else
-            return [];
+            return false;
     }
     catch(err){
         throw{ message: `fetching of securities failed`}
     }
 }
 
-const add_security = async function(secData){
+const add_security = async function(req,res,next){
+    secData = req.body;
+    //secData.securityId = crypto.randomBytes(16).toString("hex");
     try{
         const security = new SecurityModel(secData);
+        console.log(security);
         await security.save();
-        res.send()
+        res.send("Security added successfully!");
     }
     catch(err){
-        res.status(500).send()
+        res.status(500).send({message : 'Already exists!'});
     }
 }
 
