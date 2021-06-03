@@ -39,9 +39,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
 app.get('/', (req, res) => {
-	res.send(`Hello World! request recieved on http://localhost:${port}`);
+	res.sendFile(path.join(__dirname +'/index.html'))
 });
-
 app.use('/api', router);
 app.use('/api/trades', tradeRouter);
 app.use('/api/securities', securityRouter);
