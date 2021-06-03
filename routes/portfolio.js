@@ -12,5 +12,4 @@ const router = express.Router();
 router.get('/fetch',portfolioController.fetchcurrentPortfolio);
 router.get('/fetchReturns', portfolioController.fetchPnL);
 
-
 module.exports = router;

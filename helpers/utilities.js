@@ -1,20 +1,15 @@
 const avg_cost = require('./calculate_avg_cost');
 
-
-GetCurrentPriceTicker = async function(tickerSymbol){
+const GetCurrentPriceTicker = async function(tickerSymbol){
     var CurrentPrice = 100;
     return CurrentPrice;
 }
 
-CalculatePnL = async function(portfolio){
+const CalculatePnL = async function(portfolio){
     var currentPrice = await GetCurrentPriceTicker(portfolio.ticker);
     var AvgCost = portfolio.averageCost;
     var Quantity = portfolio.Quantity;
     return (currentPrice - AvgCost)*Quantity;
-}
-
-function FindTickerInPortfolio(portfolio,tickerSymbol){   
-
 }
 
 function addBuyTradesInPortfolio(old_portfolio,trade){
@@ -36,7 +31,6 @@ function addSellTradesInPortfolio(old_portfolio,trade){
     
     return updated_portfolio;
 }
-
 
 module.exports = {
     addBuyTradesInPortfolio,

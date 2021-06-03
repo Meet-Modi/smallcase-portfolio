@@ -32,7 +32,7 @@ const fetchPnL = async function(req,res){
     }
 }
 
-async function updatePortfolio(trade){
+const updatePortfolio = async function(trade){
     var ticker = trade.tickerSymbol;
     var Newportfolio = {};
     try{
