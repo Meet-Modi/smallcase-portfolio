@@ -9,6 +9,8 @@ const portfoliomodel = require('../models/portfolio')
 
 const router = express.Router();
 
-router.get('/fetch',portfolioController.fetchcurrent);
+router.get('/fetch',portfolioController.fetchcurrentPortfolio);
+router.get('/fetchReturns', portfolioController.fetchPnL);
+
 
 module.exports = router;
