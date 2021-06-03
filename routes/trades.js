@@ -3,16 +3,16 @@ const path = require('path')
 const crypto = require('crypto')
 const securitycontroller = require('../controllers/securityController')
 const portfoliocontroller = require('../controllers/portfolioController')
+const tradecontroller = require('../controllers/tradeController')
 
 const TradeModel = require('../models/trade')
 const PortfolioModel = require('../models/portfolio')
 
+
 const router = express.Router()
 
-
-var trade_counter = TradeModel.find({}).sort({_id:-1}).limit(1).tradeId;
-
-async function myFunc() {
+var trade_counter = 0;
+async function getLatestTradeId() {
     try{
     trade_counter = await TradeModel.find({}).sort({_id:-1}).limit(1);
     trade_counter = trade_counter[0].tradeId;
@@ -20,12 +20,11 @@ async function myFunc() {
     catch(err){
         trade_counter = 0;
     }
-    console.log(trade_counter);
-}
-
-setTimeout(myFunc, 6000);
+    console.log("Last TradeId : " + trade_counter);
+}setTimeout(getLatestTradeId, 6000);
 
 
+router.get('/fetch',tradecontroller.fetchAllTrades);
 
 router.post('/add',async function(req,res){
     TradeData_old = req.body;

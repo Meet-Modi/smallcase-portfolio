@@ -2,14 +2,17 @@ const { isValidObjectId } = require('mongoose');
 const utilities = require('../helpers/utilities');
 const PortfolioModel = require('../models/portfolio');
 
-async function fetchcurrent(){
+const fetchcurrent = async function(req,res){
     try{
-        var data = await PortfolioModel.find({});
-        console.log(data);
-        return data;
+        var data = await PortfolioModel.find();
+        var portfolio = [];
+        for(let i=0;i<data.length;i++){
+            portfolio.push({ticker:data[i].tickerSymbol,Quantity:data[i].Quantity,averageCost:data[i].averageCost});
+        }
+        res.send(portfolio);
     }
     catch(err){
-        throw { message: `fetching of portfolio failed.` }
+        res.send({ message: `fetching of portfolio failed.` });
     }
 }
 
@@ -18,7 +21,6 @@ async function updatePortfolio(trade){
     var Newportfolio = {};
     try{
         var Portfoliodata = await PortfolioModel.find({tickerSymbol : ticker});
-        console.log(Portfoliodata.length);
         if(Portfoliodata.length > 0){
             if(trade.tradeType == "Buy"){
                 var id = Portfoliodata[0]._id;

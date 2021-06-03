@@ -4,7 +4,6 @@ const SecurityModel = require('../models/security')
 const crypto = require('crypto')
 
 const fetchAllExistingSecurities = async function(req,res){
-    console.log("in sec. controller");
     try{
         var data = await SecurityModel.find();
         console.log(data);

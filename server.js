@@ -13,6 +13,7 @@ const env = process.env.NODE_ENV || 'DEVELOPMENT';
 const router = require('./routes');
 const tradeRouter = require('./routes/trades');
 const securityRouter = require('./routes/security');
+const portfolioRouter = require('./routes/portfolio');
 
 mongoose
 	.connect(env === 'DEVELOPMENT' ? config.MONGO_DB_URI_DEV : config.MONGO_DB_URI, {
@@ -46,6 +47,7 @@ app.get('/', (req, res) => {
 app.use('/api', router);
 app.use('/api/trades', tradeRouter);
 app.use('/api/securities', securityRouter);
+app.use('/api/portfolio', portfolioRouter);
 
 const port = process.env.PORT || 3000;
 app.listen(port, function () {
