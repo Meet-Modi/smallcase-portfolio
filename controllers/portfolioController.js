@@ -9,10 +9,10 @@ const fetchcurrentPortfolio = async function(req,res){
         for(let i=0;i<data.length;i++){
             portfolio.push({ticker:data[i].tickerSymbol,Quantity:data[i].Quantity,averageCost:data[i].averageCost});
         }
-        res.send(portfolio);
+        res.status(200).send(portfolio);
     }
     catch(err){
-        res.send({ message: `fetching of portfolio failed.` });
+        res.status(500).send({ message: `fetching of portfolio failed.` });
     }
 }
 
@@ -64,13 +64,12 @@ const updatePortfolio = async function(trade){
                 await portfolioForTicker.save();
             } 
             else{
-                throw { message: `Insufficient Funds!`, status: 400 };
+                throw { message: `Insufficient Funds!`, status: 500 };
             }
         }
-
     }
     catch(err){
-
+        res.status(500).send({ message: `fetching of portfolio failed.` });
     }
 }
 
@@ -82,10 +81,10 @@ const fetchPnL = async function(req,res){
             var PnL = await utilities.CalculatePnL({ticker:data[i].tickerSymbol,Quantity:data[i].Quantity,averageCost:data[i].averageCost});
             portfolio.push({ticker:data[i].tickerSymbol,Quantity:data[i].Quantity,averageCost:data[i].averageCost,returns:PnL});
         }
-        res.send(portfolio);
+        res.status(200).send(portfolio);
     }
     catch(err){
-        res.send({ message: `fetching of portfolio failed.` });
+        res.status(500).send({ message: `fetching of portfolio failed.` });
     }
 }
 
