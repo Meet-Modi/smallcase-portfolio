@@ -34,7 +34,7 @@ const add_security = async function(req,res,next){
         const security = new SecurityModel(secData);
         console.log(security);
         await security.save();
-        res.status(200).send("Security added successfully!");
+        res.status(200).send({message : "Security added successfully!"});
     }
     catch(err){
         res.status(500).send({message : 'Security Already exists!'});
