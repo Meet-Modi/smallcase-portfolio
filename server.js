@@ -5,9 +5,7 @@ const mongoose = require('mongoose').set('debug', true);
 const path = require('path');
 const config = require('./config/config.js');
 
-
 const env = process.env.NODE_ENV || 'DEVELOPMENT';
-
 
 // Router Files
 const router = require('./routes');

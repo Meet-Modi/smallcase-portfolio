@@ -16,19 +16,18 @@ const fetchcurrentPortfolio = async function(req,res){
     }
 }
 
-
-const fetchPnL = async function(req,res){
+const fetchcurrentPortfolioByTicker = async function(ticker){
     try{
-        var data = await PortfolioModel.find();
-        var portfolio = [];
-        for(let i=0;i<data.length;i++){
-            var PnL = await utilities.CalculatePnL({ticker:data[i].tickerSymbol,Quantity:data[i].Quantity,averageCost:data[i].averageCost});
-            portfolio.push({ticker:data[i].tickerSymbol,Quantity:data[i].Quantity,averageCost:data[i].averageCost,returns:PnL});
+        var Portfoliodata = await PortfolioModel.find({tickerSymbol : ticker});
+        if(Portfoliodata.length > 0){
+            return Portfoliodata[0];
         }
-        res.send(portfolio);
+        else{
+            return [];
+        }
     }
     catch(err){
-        res.send({ message: `fetching of portfolio failed.` });
+        return [];
     }
 }
 
@@ -60,7 +59,7 @@ const updatePortfolio = async function(trade){
                 var portfolio_row = {};
                 portfolio_row.tickerSymbol = ticker;
                 portfolio_row.Quantity = trade.quantity;
-                portfolio_row.averageCost = trade.txnAmount;
+                portfolio_row.averageCost = trade.unitPrice;
                 portfolioForTicker = new PortfolioModel(portfolio_row);
                 await portfolioForTicker.save();
             } 
@@ -75,10 +74,25 @@ const updatePortfolio = async function(trade){
     }
 }
 
+const fetchPnL = async function(req,res){
+    try{
+        var data = await PortfolioModel.find();
+        var portfolio = [];
+        for(let i=0;i<data.length;i++){
+            var PnL = await utilities.CalculatePnL({ticker:data[i].tickerSymbol,Quantity:data[i].Quantity,averageCost:data[i].averageCost});
+            portfolio.push({ticker:data[i].tickerSymbol,Quantity:data[i].Quantity,averageCost:data[i].averageCost,returns:PnL});
+        }
+        res.send(portfolio);
+    }
+    catch(err){
+        res.send({ message: `fetching of portfolio failed.` });
+    }
+}
 
 
 module.exports = {
     fetchcurrentPortfolio,
     updatePortfolio,
-    fetchPnL
+    fetchPnL,
+    fetchcurrentPortfolioByTicker
 };

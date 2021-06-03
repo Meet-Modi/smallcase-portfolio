@@ -1,6 +1,6 @@
 const express = require('express')
-const path = require('path')
-const crypto = require('crypto')
+const router = express.Router()
+
 const securitycontroller = require('../controllers/securityController')
 const portfoliocontroller = require('../controllers/portfolioController')
 const tradecontroller = require('../controllers/tradeController')
@@ -8,8 +8,8 @@ const tradecontroller = require('../controllers/tradeController')
 const TradeModel = require('../models/trade')
 const PortfolioModel = require('../models/portfolio')
 
+const deleteTradeValidator = require('../middlewares/deleteTradeValidator')
 
-const router = express.Router()
 
 var trade_counter = 0;
 async function getLatestTradeId() {
@@ -24,7 +24,11 @@ async function getLatestTradeId() {
 }setTimeout(getLatestTradeId, 6000);
 
 
+
 router.get('/fetch',tradecontroller.fetchAllTrades);
+router.post('/delete',deleteTradeValidator.checkDeleteRequest,tradecontroller.DeleteTrade);
+
+
 
 router.post('/add',async function(req,res){
     TradeData_old = req.body;
@@ -56,9 +60,7 @@ async function validate(TradeData){
     TradeData.tradeId = ++trade_counter;
     TradeData.txnAmount = TradeData.unitPrice * TradeData.quantity;
     TradeData.timestamp = new Date();
-
     return TradeData;
-    
 }
 
 module.exports = router;
