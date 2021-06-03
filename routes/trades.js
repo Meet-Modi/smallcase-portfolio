@@ -9,6 +9,7 @@ const TradeModel = require('../models/trade')
 const PortfolioModel = require('../models/portfolio')
 
 const deleteTradeValidator = require('../middlewares/deleteTradeValidator')
+const updateTradeValidator = require('../middlewares/updateTradeValidator')
 
 
 var trade_counter = 0;
@@ -27,7 +28,7 @@ async function getLatestTradeId() {
 
 router.get('/fetch',tradecontroller.fetchAllTrades);
 router.post('/delete',deleteTradeValidator.checkDeleteRequest,tradecontroller.DeleteTrade);
-
+router.put('/update',updateTradeValidator.checkUpdateRequest,tradecontroller.UpdateTrade);
 
 
 router.post('/add',async function(req,res){

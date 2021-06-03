@@ -3,6 +3,7 @@ const SecurityModel = require('../models/security')
 const PortfolioModel = require('../models/portfolio')
 const PortfolioController = require('../controllers/portfolioController');
 const utility = require('../helpers/utilities')
+const avg_cost = require('../helpers/calculate_avg_cost');
 
 const fetchAllTrades = async function(req,res){
     try{
@@ -20,6 +21,76 @@ const fetchAllTrades = async function(req,res){
     }
     catch(err){
         res.send({ message: `fetching of securities failed.`})
+    }
+}
+
+const UpdateTrade = async function(req,res){
+    try{
+        var TradeData = req.body;
+        var old_trade = await fetchTradeByTradeId(TradeData.tradeId);
+        old_trade = old_trade[0];
+        console.log("OLD TRADE 0   " +old_trade);
+        var old_portfolio = await PortfolioController.fetchcurrentPortfolioByTicker(old_trade.tickerSymbol);
+        var updated_portfolio = JSON.parse(JSON.stringify(old_portfolio));
+        var Updated_trade = JSON.parse(JSON.stringify(old_trade));
+
+        Updated_trade.quantity = TradeData.Quantity;
+        Updated_trade.tradeType = TradeData.TradeType;
+        Updated_trade.unitPrice = TradeData.unitPrice;
+
+        if(Updated_trade.tradeType !==  old_trade.tradeType){
+            if(old_trade.tradeType == "Buy"){
+                if(old_portfolio.Quantity - old_trade.quantity - Updated_trade.quantity >= 0){
+                    updated_portfolio.Quantity = old_portfolio.Quantity - old_trade.quantity - Updated_trade.quantity;
+                    updated_portfolio.averageCost = avg_cost.RevertAvgCost(old_portfolio,old_trade);
+                    console.log("in buy to sell");
+                }
+                else{
+                    console.log("Not possible buy to sell");
+                }
+            }
+            else{
+                /* Sell to Buy */
+                updated_portfolio.averageCost = avg_cost.GetNewAvgCost(old_portfolio,old_trade);
+                updated_portfolio.Quantity = old_portfolio.Quantity + old_trade.quantity;
+
+                updated_portfolio.averageCost = avg_cost.GetNewAvgCost(updated_portfolio,Updated_trade);
+                updated_portfolio.Quantity = updated_portfolio.Quantity + Updated_trade.quantity;
+            }
+        }
+        else if(Updated_trade.tradeType ==  old_trade.tradeType){
+            if(Updated_trade.tradeType == "Buy"){
+                if(old_portfolio.Quantity - old_trade.quantity + Updated_trade.quantity >= 0){
+       
+                    updated_portfolio.averageCost = avg_cost.RevertAvgCost(old_portfolio,old_trade);
+                    updated_portfolio.Quantity = old_portfolio.Quantity - old_trade.quantity;
+                    
+                    updated_portfolio.averageCost = avg_cost.GetNewAvgCost(updated_portfolio,Updated_trade);
+                    updated_portfolio.Quantity = updated_portfolio.Quantity + Updated_trade.quantity;
+                    
+                    console.log("in Buy Quantity update case");
+                }
+                else{
+                    console.log("Not possible");
+                }
+            }
+            else if(Updated_trade.tradeType == "Sell"){
+                if(old_portfolio.Quantity + old_trade.quantity - Updated_trade.quantity >= 0){
+                    updated_portfolio.Quantity = old_portfolio.Quantity + old_trade.quantity - Updated_trade.quantity;
+                    console.log("in Sell Quantity update case");
+                }
+            }
+            else{
+                console.log("No such case possible");
+            }
+        }
+        else{
+            console.log("No such case possible");
+        }
+        res.send(updated_portfolio);
+    }
+    catch(err){
+        res.send(err);
     }
 }
 
@@ -84,7 +155,8 @@ module.exports = {
     fetchAllTrades,
     fetchAllTradesByTicker,
     fetchTradeByTradeId,
-    DeleteTrade
+    DeleteTrade,
+    UpdateTrade
 }
 
 
