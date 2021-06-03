@@ -14,7 +14,7 @@ const fetchAllExistingSecurities = async function(req,res){
     }
 }
 
-const check_if_security_exists = async function(tickersymbol){
+const CheckIfSecurityExists = async function(tickersymbol){
     try{
         var data = await SecurityModel.findOne({tickerSymbol : tickersymbol});
         if(data)
@@ -43,6 +43,6 @@ const add_security = async function(req,res,next){
 
 module.exports = {
     fetchAllExistingSecurities,
-    check_if_security_exists,
+    CheckIfSecurityExists,
     add_security
 };
