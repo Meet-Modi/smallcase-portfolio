@@ -5,7 +5,9 @@ const securityController = require('../controllers/securityController')
 
 const securitymodel = require('../models/security')
 
+const addSecurityValidator = require('../middlewares/addSecurityValidator')
+
 router.get('/fetch',securityController.fetchAllExistingSecurities);
-router.post('/add',securityController.add_security);
+router.post('/add',addSecurityValidator.addSecurityValidator,securityController.add_security);
 
 module.exports = router;
