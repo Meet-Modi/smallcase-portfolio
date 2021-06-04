@@ -17,8 +17,12 @@ Negative stock validation is implemented in the function
 const InsertTrades = async function(req,res){
     try{
         var TradeData = req.body;
+
         var trade_counter = await TradeModel.find({}).sort({_id:-1}).limit(1);
-        trade_counter = trade_counter[0].tradeId;
+        if(trade_counter.length == 0)
+            trade_counter = 0;
+        else
+            trade_counter = trade_counter[0].tradeId;
         TradeData.tradeId = ++trade_counter;
         TradeData.txnAmount = TradeData.unitPrice * TradeData.quantity;
         TradeData.timestamp = new Date();
@@ -53,6 +57,7 @@ const InsertTrades = async function(req,res){
             return;
     }
     catch(err){
+        console.log(err);
         res.status(500).send({message:err});
         return;
     }
