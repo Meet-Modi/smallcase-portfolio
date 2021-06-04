@@ -141,8 +141,8 @@ const UpdateTrade = async function(req,res){
             res.status(500).send({message : "No such update is possible"});
             return;
         }
-        
-        await TradeModel.findByIdAndUpdate(Updated_trade._id,{tradeType:TradeData.TradeType,unitPrice:TradeData.unitPrice,quantity:TradeData.Quantity});
+        var txnAmt = TradeData.unitPrice * TradeData.Quantity;
+        await TradeModel.findByIdAndUpdate(Updated_trade._id,{tradeType:TradeData.TradeType,unitPrice:TradeData.unitPrice,quantity:TradeData.Quantity,txnAmount:txnAmt});
         
         await PortfolioModel.findByIdAndUpdate(updated_portfolio._id,{averageCost:updated_portfolio.averageCost ,Quantity :  updated_portfolio.Quantity})
         
