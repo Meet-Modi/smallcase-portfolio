@@ -2,7 +2,7 @@
 // passed in the parameters. If not true, will reject the user request.
 const checkDeleteRequest = async function(req,res,next){
     var TradeData = req.body;
-    if(Number.isInteger(Tradedata.tradeId)){
+    if(Number.isInteger(TradeData.tradeId)){
         next();
     }
     else{
