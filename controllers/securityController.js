@@ -1,7 +1,9 @@
 const express = require('express');
 const path = require('path');
 const SecurityModel = require('../models/security')
-
+/*
+Controller function to fetch Existing Securities
+*/
 const fetchAllExistingSecurities = async function(req,res){
     try{
         var data = await SecurityModel.find();
@@ -14,7 +16,9 @@ const fetchAllExistingSecurities = async function(req,res){
         return;
     }
 }
-
+/*
+Function to check if Security exists or not
+*/ 
 const CheckIfSecurityExists = async function(tickersymbol){
     try{
         var data = await SecurityModel.findOne({tickerSymbol : tickersymbol});
@@ -27,7 +31,9 @@ const CheckIfSecurityExists = async function(tickersymbol){
         throw{ message: 'fetching of securities failed'}
     }
 }
-
+/*
+Function to add security in the collection
+*/
 const add_security = async function(req,res,next){
     secData = req.body;
     try{

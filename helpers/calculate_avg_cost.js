@@ -1,5 +1,8 @@
 const e = require("express");
-
+/*
+This function calculates the AvgCost whenever a buy trade is 
+added in the portfolio
+*/
 function GetNewAvgCost(Oldportfolio,NewTrade){
     var quantity1 = Oldportfolio.Quantity;
     var quantity2 = NewTrade.quantity;
@@ -12,6 +15,11 @@ function GetNewAvgCost(Oldportfolio,NewTrade){
     return new_avgprice;
 }
 
+
+/*
+This function rollbacks the AvgCost whenever a buy trade is 
+removed from the portfolio
+*/
 function RevertAvgCost(Oldportfolio,trade){
     var new_avgprice = 0;
     

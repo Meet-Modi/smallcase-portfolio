@@ -1,3 +1,6 @@
+// Function for checking lowercase of tickersymbol, integer format of quantity and number format
+// of price and if BUY AND SELL is only passed in the parameters. If not true, will reject the user 
+// request.
 function addTradeValidator(req,res,next){
     var data = req.body;
     if(Number.isInteger(data.quantity)){

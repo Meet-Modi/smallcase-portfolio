@@ -9,7 +9,11 @@ const utility = require('../helpers/utilities')
 const avg_cost = require('../helpers/calculate_avg_cost');
 const { response } = require('express');
 
-
+/*
+Controller function for inserting trades in the trade table and also updating the portfolio
+quantity and also averagecost for holding.
+Negative stock validation is implemented in the function
+*/ 
 const InsertTrades = async function(req,res){
     try{
         var TradeData = req.body;
@@ -54,7 +58,9 @@ const InsertTrades = async function(req,res){
     }
 }
 
-
+/*
+Controller function to fetch all trades for each respective holdings
+*/
 const fetchAllTrades = async function(req,res){
     try{
         var data = await SecurityModel.find();
@@ -72,7 +78,17 @@ const fetchAllTrades = async function(req,res){
         res.status(500).send({ message: `fetching of securities failed.`})
     }
 }
+/*
 
+
+/*
+Function to update the past trades. Entities such as 
+TradeType(Buy->Sell) & (Sell->Buy)
+Quantity (increase ) & (Decrease)
+unitPrice (increase ) & (Decrease) can be updated simultaneously.
+If any posssibility of negative stock holding is there. Update will be rejected.
+Otherwise it will be updated.
+*/
 const UpdateTrade = async function(req,res){
     try{
         var TradeData = req.body;
@@ -154,7 +170,12 @@ const UpdateTrade = async function(req,res){
         return;
     }
 }
-
+/*
+Function for deleting the trades (Buy/Sell) both.
+Negative Stock Holding Validation has been implemented
+in case it pass, then only trade will be deleted.
+Else the request will be rejected.
+*/
 const DeleteTrade = async function(req,res){
     try{
         var TradeData = await fetchTradeByTradeId(req.body.tradeId);
@@ -194,6 +215,9 @@ const DeleteTrade = async function(req,res){
     }
 }
 
+/*
+    Fucntion for fetching trade row by TradeId
+*/
 const fetchTradeByTradeId = async function(tradeid){
     try{
         var data = await TradeModel.find({tradeId: tradeid});
@@ -204,7 +228,9 @@ const fetchTradeByTradeId = async function(tradeid){
         throw {message: "invalid TradeId"}
     }
 }
-
+/*
+function to get all by tickerSymbol
+*/
 const fetchAllTradesByTicker = async function(tickerSymbol){
     try{
         var data = await SecurityModel.find();

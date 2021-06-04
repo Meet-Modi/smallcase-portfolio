@@ -1,16 +1,24 @@
 const avg_cost = require('./calculate_avg_cost');
-
+/*
+This function returns the current price of the security
+*/
 const GetCurrentPriceTicker = async function(tickerSymbol){
     var CurrentPrice = 100;
     return CurrentPrice;
 }
 
+/*
+This function calculates the Current Profir and Loss of the portfolio based 
+on the current price. i.e unrealised gains/returns in the portfolio.
+*/
 const CalculatePnL = async function(portfolio){
     var currentPrice = await GetCurrentPriceTicker(portfolio.ticker);
     var AvgCost = portfolio.averageCost;
     var Quantity = portfolio.Quantity;
     return (currentPrice - AvgCost)*Quantity;
 }
+
+//This function updates the portfolio row for the respective Buy trade
 
 function addBuyTradesInPortfolio(old_portfolio,trade){
     var updated_portfolio = {};
@@ -22,6 +30,8 @@ function addBuyTradesInPortfolio(old_portfolio,trade){
     return updated_portfolio;
 }
 
+//This function updates the portfolio row for the respective Sell trade
+
 function addSellTradesInPortfolio(old_portfolio,trade){
     var updated_portfolio = {};
     
@@ -32,6 +42,8 @@ function addSellTradesInPortfolio(old_portfolio,trade){
     return updated_portfolio;
 }
 
+//This function updates the portfolio row for the removed respective Buy trade
+
 function removeBuyTradesInPortfolio(old_portfolio,trade){
     var updated_portfolio = {};
     
@@ -41,6 +53,8 @@ function removeBuyTradesInPortfolio(old_portfolio,trade){
 
     return updated_portfolio;
 }
+
+//This function updates the portfolio row for the removed respective Sell trade
 
 function removeSellTradesInPortfolio(old_portfolio,trade){
     var updated_portfolio = {};

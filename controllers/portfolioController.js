@@ -1,7 +1,9 @@
 const { isValidObjectId } = require('mongoose');
 const utilities = require('../helpers/utilities');
 const PortfolioModel = require('../models/portfolio');
-
+/*
+This function fetches the whole portfolio from the collection
+*/
 const fetchcurrentPortfolio = async function(req,res){
     try{
         var data = await PortfolioModel.find();
@@ -15,7 +17,9 @@ const fetchcurrentPortfolio = async function(req,res){
         res.status(500).send({ message: `fetching of portfolio failed.` });
     }
 }
-
+/*
+This function fetches the row of the portfolio for particular ticker
+*/
 const fetchcurrentPortfolioByTicker = async function(ticker){
     try{
         var Portfoliodata = await PortfolioModel.find({tickerSymbol : ticker});
@@ -30,7 +34,10 @@ const fetchcurrentPortfolioByTicker = async function(ticker){
         return [];
     }
 }
-
+/*
+Function to update the Portfolio which would call the utilities functions
+for adding new Trades in the system.
+*/
 const updatePortfolio = async function(trade){
     var ticker = trade.tickerSymbol;
     var Newportfolio = {};
@@ -72,7 +79,10 @@ const updatePortfolio = async function(trade){
         res.status(500).send({ message: `fetching of portfolio failed.` });
     }
 }
-
+/*
+Controller function for integrating utilites and Model data to calculate
+returns (PnL : Profit and Loss)
+*/
 const fetchPnL = async function(req,res){
     try{
         var data = await PortfolioModel.find();
